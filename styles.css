@@ -285,9 +285,9 @@ h3 {
 
 .letter-layout {
   position: relative;
-  width: min(980px, 100%);
+  width: min(1080px, 100%);
   margin: 0 auto;
-  min-height: 560px;
+  min-height: 610px;
   display: grid;
   place-items: center;
 }
@@ -301,7 +301,7 @@ h3 {
     repeating-linear-gradient(0deg, transparent 0 35px, rgba(255, 143, 189, 0.14) 36px 37px);
   box-shadow: var(--shadow);
   transform: rotate(-1deg);
-  z-index: 2;
+  z-index: 3;
 }
 
 .letter-card p {
@@ -326,28 +326,40 @@ h3 {
   z-index: 1;
 }
 
-.floating-photo:nth-child(1) {
-  left: 2%;
-  top: 8%;
-  transform: rotate(-10deg);
+.video-slot {
+  width: 170px;
+  height: 235px;
 }
 
-.floating-photo:nth-child(2) {
-  right: 3%;
-  top: 4%;
-  transform: rotate(9deg);
+.slot-one {
+  left: 3% !important;
+  top: 8% !important;
+  transform: rotate(-10deg) !important;
 }
 
-.floating-photo:nth-child(4) {
-  left: 7%;
-  bottom: 0;
-  transform: rotate(7deg);
+.slot-two {
+  right: 4% !important;
+  top: 6% !important;
+  transform: rotate(9deg) !important;
 }
 
-.floating-photo:nth-child(5) {
-  right: 8%;
-  bottom: 3%;
-  transform: rotate(-8deg);
+.slot-three {
+  left: 8% !important;
+  bottom: 3% !important;
+  transform: rotate(7deg) !important;
+}
+
+.slot-four {
+  right: 9% !important;
+  bottom: 5% !important;
+  transform: rotate(-8deg) !important;
+}
+
+.slot-five {
+  left: 50% !important;
+  bottom: -9% !important;
+  transform: translateX(-50%) rotate(3deg) !important;
+  z-index: 2;
 }
 
 .photo-placeholder {
@@ -367,7 +379,8 @@ h3 {
   padding: 10px;
 }
 
-.photo-img {
+.photo-img,
+.photo-video {
   width: 100%;
   height: 100%;
   min-height: 110px;
@@ -398,8 +411,9 @@ h3 {
 }
 
 .gallery-item .photo-placeholder,
-.gallery-item .photo-img {
-  height: 190px;
+.gallery-item .photo-img,
+.gallery-item .photo-video {
+  height: 220px;
 }
 
 .gallery-caption {
@@ -410,7 +424,7 @@ h3 {
 }
 
 .game-board {
-  width: min(760px, 100%);
+  width: min(820px, 100%);
   margin: 0 auto 22px;
   display: grid;
   grid-template-columns: repeat(4, 1fr);
@@ -465,7 +479,8 @@ h3 {
 }
 
 .card-back .photo-placeholder,
-.card-back .photo-img {
+.card-back .photo-img,
+.card-back .photo-video {
   height: 100%;
   min-height: 100%;
 }
@@ -519,7 +534,8 @@ h3 {
 }
 
 #lightboxContent .photo-placeholder,
-#lightboxContent .photo-img {
+#lightboxContent .photo-img,
+#lightboxContent .photo-video {
   height: min(62vh, 520px);
 }
 
@@ -605,17 +621,24 @@ h3 {
     transform: rotate(0);
   }
 
-  .floating-photo {
+  .floating-photo,
+  .video-slot {
     position: relative;
     display: inline-block;
     width: calc(50% - 10px);
-    height: 150px;
+    height: 170px;
     margin: 5px;
     left: auto !important;
     right: auto !important;
     top: auto !important;
     bottom: auto !important;
-    transform: rotate(-4deg);
+    transform: rotate(-4deg) !important;
+  }
+
+  .slot-five {
+    width: 70%;
+    margin-left: 15%;
+    transform: rotate(2deg) !important;
   }
 
   .gallery-grid {
@@ -623,11 +646,11 @@ h3 {
   }
 
   .game-board {
-    grid-template-columns: repeat(3, 1fr);
-    gap: 9px;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 8px;
   }
 
   .card-front {
-    font-size: 30px;
+    font-size: 28px;
   }
 }
