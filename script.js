@@ -1,4 +1,13 @@
-const TARGET_DATE = new Date('2026-05-05T00:00:00+07:00');
+// ทดสอบให้ปุ่มขึ้นตอน 5 โมง 5 นาทีของวันนี้
+const nowForTarget = new Date();
+const TARGET_DATE = new Date(
+  nowForTarget.getFullYear(),
+  nowForTarget.getMonth(),
+  nowForTarget.getDate(),
+  17,
+  5,
+  0
+);
 
 const TEST_MODE = false;
 
@@ -108,6 +117,8 @@ function updateCountdown() {
     secondsEl.textContent = '00';
     return;
   }
+
+  enterBtn.classList.add('hidden');
 
   const totalSeconds = Math.floor(diff / 1000);
   daysEl.textContent = pad(Math.floor(totalSeconds / (60 * 60 * 24)));
@@ -499,8 +510,6 @@ function confettiBurst() {
 }
 
 if (enterBtn) {
-  enterBtn.classList.remove('hidden');
-
   enterBtn.addEventListener('click', () => {
     showScreen('homeScreen');
     confettiBurst();
