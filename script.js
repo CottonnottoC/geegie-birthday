@@ -1,7 +1,5 @@
 const TARGET_DATE = new Date('2026-05-05T00:00:00+07:00');
 
-// ตอนนี้ตั้งเป็น true เพื่อให้ลองดูข้างในได้เลย
-// ตอนจะส่งให้แฟนจริง ค่อยเปลี่ยนเป็น false
 const TEST_MODE = true;
 
 const imageMap = {
@@ -42,45 +40,31 @@ const captions = [
 ];
 
 const screens = document.querySelectorAll('.screen');
-
 const enterBtn = document.getElementById('enterBtn');
 const envelopeBtn = document.getElementById('envelopeBtn');
-
 const daysEl = document.getElementById('days');
 const hoursEl = document.getElementById('hours');
 const minutesEl = document.getElementById('minutes');
 const secondsEl = document.getElementById('seconds');
-
 const galleryGrid = document.getElementById('galleryGrid');
 const gameBoard = document.getElementById('gameBoard');
 const scoreText = document.getElementById('scoreText');
-
 const restartBtn = document.getElementById('restartBtn');
 const playAgainBtn = document.getElementById('playAgainBtn');
-
 const lightbox = document.getElementById('lightbox');
 const lightboxContent = document.getElementById('lightboxContent');
 const closeLightbox = document.getElementById('closeLightbox');
-
 const winModal = document.getElementById('winModal');
 const closeWin = document.getElementById('closeWin');
-
 const bgHearts = document.getElementById('bgHearts');
 
 function showScreen(id) {
-  screens.forEach((screen) => {
-    screen.classList.remove('active');
-  });
+  screens.forEach((screen) => screen.classList.remove('active'));
 
   const targetScreen = document.getElementById(id);
-  if (targetScreen) {
-    targetScreen.classList.add('active');
-  }
+  if (targetScreen) targetScreen.classList.add('active');
 
-  window.scrollTo({
-    top: 0,
-    behavior: 'smooth'
-  });
+  window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
 function pad(num) {
@@ -112,15 +96,39 @@ function updateCountdown() {
   }
 
   const totalSeconds = Math.floor(diff / 1000);
-  const days = Math.floor(totalSeconds / (60 * 60 * 24));
-  const hours = Math.floor((totalSeconds / (60 * 60)) % 24);
-  const minutes = Math.floor((totalSeconds / 60) % 60);
-  const seconds = totalSeconds % 60;
+  daysEl.textContent = pad(Math.floor(totalSeconds / (60 * 60 * 24)));
+  hoursEl.textContent = pad(Math.floor((totalSeconds / (60 * 60)) % 24));
+  minutesEl.textContent = pad(Math.floor((totalSeconds / 60) % 60));
+  secondsEl.textContent = pad(totalSeconds % 60);
+}
 
-  daysEl.textContent = pad(days);
-  hoursEl.textContent = pad(hours);
-  minutesEl.textContent = pad(minutes);
-  secondsEl.textContent = pad(seconds);
+function setFrameToVideoRatio(video) {
+  const frame = video.closest('.video-slot');
+  if (!frame) return;
+
+  const w = video.videoWidth;
+  const h = video.videoHeight;
+  if (!w || !h) return;
+
+  const ratio = w / h;
+  frame.classList.toggle('is-landscape', ratio > 1.15);
+
+  let frameW;
+  let frameH;
+
+  if (ratio > 1.15) {
+    frameW = 320;
+    frameH = Math.round(frameW / ratio) + 44;
+  } else if (ratio < 0.85) {
+    frameH = 285;
+    frameW = Math.round((frameH - 44) * ratio) + 20;
+  } else {
+    frameW = 245;
+    frameH = 245 + 44;
+  }
+
+  frame.style.setProperty('--frame-w', `${frameW}px`);
+  frame.style.setProperty('--frame-h', `${frameH}px`);
 }
 
 function createPhotoElement(name) {
@@ -145,21 +153,7 @@ function createPhotoElement(name) {
       video.setAttribute('playsinline', '');
 
       video.addEventListener('loadedmetadata', () => {
-        const frame = video.closest('.video-slot');
-        if (!frame) return;
-
-        frame.classList.remove('video-portrait', 'video-landscape', 'video-square');
-
-        const w = video.videoWidth;
-        const h = video.videoHeight;
-
-        if (w > h * 1.15) {
-          frame.classList.add('video-landscape');
-        } else if (h > w * 1.15) {
-          frame.classList.add('video-portrait');
-        } else {
-          frame.classList.add('video-square');
-        }
+        setFrameToVideoRatio(video);
       });
 
       return video;
@@ -193,23 +187,21 @@ function buildGallery() {
 
   for (let i = 1; i <= 8; i++) {
     const name = `gallery-photo-${i}`;
-
     const item = document.createElement('div');
+
     item.className = 'polaroid gallery-item';
     item.style.setProperty('--r', i % 2 === 0 ? '2deg' : '-2deg');
 
     const photo = createPhotoElement(name);
-
     const cap = document.createElement('p');
+
     cap.className = 'gallery-caption';
     cap.textContent = captions[i - 1];
 
     item.appendChild(photo);
     item.appendChild(cap);
 
-    item.addEventListener('click', () => {
-      openLightbox(name);
-    });
+    item.addEventListener('click', () => openLightbox(name));
 
     galleryGrid.appendChild(item);
   }
@@ -244,21 +236,13 @@ function buildGame() {
   const pairs = [];
 
   for (let i = 1; i <= 8; i++) {
-    pairs.push({
-      id: `geegie-card-${i}`,
-      pair: i
-    });
-
-    pairs.push({
-      id: `geegie-card-${i}`,
-      pair: i
-    });
+    pairs.push({ id: `geegie-card-${i}`, pair: i });
+    pairs.push({ id: `geegie-card-${i}`, pair: i });
   }
 
-  const cards = shuffle(pairs);
-
-  cards.forEach((cardData) => {
+  shuffle(pairs).forEach((cardData) => {
     const card = document.createElement('button');
+
     card.className = 'memory-card';
     card.dataset.pair = cardData.pair;
 
@@ -269,12 +253,9 @@ function buildGame() {
       </div>
     `;
 
-    const back = card.querySelector('.card-back');
-    back.appendChild(createPhotoElement(cardData.id));
+    card.querySelector('.card-back').appendChild(createPhotoElement(cardData.id));
 
-    card.addEventListener('click', () => {
-      flipCard(card);
-    });
+    card.addEventListener('click', () => flipCard(card));
 
     gameBoard.appendChild(card);
   });
@@ -289,20 +270,14 @@ function flipCard(card) {
   card.classList.add('flipped');
   flipped.push(card);
 
-  if (flipped.length === 2) {
-    checkMatch();
-  }
+  if (flipped.length === 2) checkMatch();
 }
 
 function checkMatch() {
-  const first = flipped[0];
-  const second = flipped[1];
-
+  const [first, second] = flipped;
   if (!first || !second) return;
 
-  const isMatch = first.dataset.pair === second.dataset.pair;
-
-  if (isMatch) {
+  if (first.dataset.pair === second.dataset.pair) {
     first.classList.add('matched');
     second.classList.add('matched');
 
@@ -313,10 +288,7 @@ function checkMatch() {
 
     if (matchedCount === 8) {
       setTimeout(() => {
-        if (winModal) {
-          winModal.classList.remove('hidden');
-        }
-
+        winModal.classList.remove('hidden');
         confettiBurst();
       }, 500);
     }
@@ -326,14 +298,11 @@ function checkMatch() {
     setTimeout(() => {
       first.classList.remove('flipped');
       second.classList.remove('flipped');
-
       flipped = [];
       lockBoard = false;
     }, 800);
   }
 }
-
-/* Fancy background hearts */
 
 function randomBetween(min, max) {
   return Math.random() * (max - min) + min;
@@ -350,6 +319,7 @@ function createSparkles() {
 
   for (let i = 0; i < 18; i++) {
     const sparkle = document.createElement('span');
+
     sparkle.className = 'sparkle';
     sparkle.textContent = randomItem(sparkleSymbols);
     sparkle.style.left = `${randomBetween(0, 100)}%`;
@@ -357,6 +327,7 @@ function createSparkles() {
     sparkle.style.fontSize = `${randomBetween(10, 22)}px`;
     sparkle.style.setProperty('--twinkle-duration', `${randomBetween(2.5, 5.5)}s`);
     sparkle.style.animationDelay = `${randomBetween(0, 4)}s`;
+
     bgHearts.appendChild(sparkle);
   }
 }
@@ -364,20 +335,18 @@ function createSparkles() {
 function addOneHeart(options = {}) {
   if (!bgHearts) return;
 
-  const {
-    initialDelay = 0,
-    startRandomY = false
-  } = options;
+  const { initialDelay = 0, startRandomY = false } = options;
 
   const heart = document.createElement('button');
+
   heart.type = 'button';
   heart.className = 'heart';
   heart.textContent = randomItem(['💗', '💕', '💖', '💘', '💞']);
 
   heart.style.left = `${randomBetween(0, 100)}%`;
-  heart.style.fontSize = `${randomBetween(18, 34)}px`;
-  heart.style.opacity = `${randomBetween(0.55, 1)}`;
-  heart.style.setProperty('--float-duration', `${randomBetween(9, 16)}s`);
+  heart.style.fontSize = `${randomBetween(20, 38)}px`;
+  heart.style.opacity = `${randomBetween(0.65, 1)}`;
+  heart.style.setProperty('--float-duration', `${randomBetween(10, 17)}s`);
   heart.style.setProperty('--sway-duration', `${randomBetween(2.8, 5.2)}s`);
   heart.style.setProperty('--delay', `${initialDelay}s`);
 
@@ -385,7 +354,7 @@ function addOneHeart(options = {}) {
     heart.style.bottom = `${randomBetween(-8, 92)}vh`;
   }
 
-  heart.addEventListener('click', (e) => {
+  heart.addEventListener('pointerdown', (e) => {
     e.preventDefault();
     e.stopPropagation();
     popHeart(heart);
@@ -402,37 +371,30 @@ function addOneHeart(options = {}) {
 }
 
 function spawnHeartBurst(x, y) {
-  if (!bgHearts) return;
-
-  const particles = 10;
-  const burstSymbols = ['💗', '💕', '✨', '💖'];
+  const particles = 12;
+  const burstSymbols = ['💗', '💕', '✨', '💖', '💘'];
 
   for (let i = 0; i < particles; i++) {
     const piece = document.createElement('span');
+
     piece.className = 'burst-particle';
     piece.textContent = randomItem(burstSymbols);
     piece.style.left = `${x}px`;
     piece.style.top = `${y}px`;
-    piece.style.fontSize = `${randomBetween(12, 22)}px`;
-    piece.style.setProperty('--dx', `${randomBetween(-85, 85)}px`);
-    piece.style.setProperty('--dy', `${randomBetween(-85, 85)}px`);
+    piece.style.fontSize = `${randomBetween(13, 24)}px`;
+    piece.style.setProperty('--dx', `${randomBetween(-95, 95)}px`);
+    piece.style.setProperty('--dy', `${randomBetween(-95, 95)}px`);
     piece.style.setProperty('--rot', `${randomBetween(-180, 180)}deg`);
 
-    bgHearts.appendChild(piece);
+    document.body.appendChild(piece);
 
-    requestAnimationFrame(() => {
-      piece.classList.add('animate');
-    });
+    requestAnimationFrame(() => piece.classList.add('animate'));
 
-    setTimeout(() => {
-      piece.remove();
-    }, 850);
+    setTimeout(() => piece.remove(), 850);
   }
 }
 
 function popHeart(heart) {
-  if (!heart || !bgHearts) return;
-
   const rect = heart.getBoundingClientRect();
   const centerX = rect.left + rect.width / 2;
   const centerY = rect.top + rect.height / 2;
@@ -441,10 +403,8 @@ function popHeart(heart) {
   spawnHeartBurst(centerX, centerY);
 
   setTimeout(() => {
-    if (heart.isConnected) {
-      heart.remove();
-    }
-    addOneHeart({ initialDelay: randomBetween(0.2, 1.5) });
+    if (heart.isConnected) heart.remove();
+    addOneHeart({ initialDelay: randomBetween(0.1, 1.2) });
   }, 120);
 }
 
@@ -454,7 +414,7 @@ function createFloatingHearts() {
   bgHearts.innerHTML = '';
   createSparkles();
 
-  for (let i = 0; i < 34; i++) {
+  for (let i = 0; i < 38; i++) {
     addOneHeart({
       initialDelay: randomBetween(0, 10),
       startRandomY: true
@@ -508,17 +468,12 @@ function confettiBurst() {
 
     frame++;
 
-    if (frame < 150) {
-      requestAnimationFrame(draw);
-    } else {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-    }
+    if (frame < 150) requestAnimationFrame(draw);
+    else ctx.clearRect(0, 0, canvas.width, canvas.height);
   }
 
   draw();
 }
-
-/* Events */
 
 if (enterBtn) {
   enterBtn.classList.remove('hidden');
@@ -533,28 +488,20 @@ if (envelopeBtn) {
   envelopeBtn.addEventListener('click', () => {
     envelopeBtn.classList.add('open');
 
-    setTimeout(() => {
-      showScreen('menuScreen');
-    }, 650);
+    setTimeout(() => showScreen('menuScreen'), 650);
   });
 }
 
 document.querySelectorAll('.category-card').forEach((card) => {
-  card.addEventListener('click', () => {
-    showScreen(card.dataset.target);
-  });
+  card.addEventListener('click', () => showScreen(card.dataset.target));
 });
 
 document.querySelectorAll('.back-menu').forEach((btn) => {
-  btn.addEventListener('click', () => {
-    showScreen('menuScreen');
-  });
+  btn.addEventListener('click', () => showScreen('menuScreen'));
 });
 
 document.querySelectorAll('.back-home').forEach((btn) => {
-  btn.addEventListener('click', () => {
-    showScreen('homeScreen');
-  });
+  btn.addEventListener('click', () => showScreen('homeScreen'));
 });
 
 if (closeLightbox) {
@@ -565,35 +512,22 @@ if (closeLightbox) {
 
 if (lightbox) {
   lightbox.addEventListener('click', (e) => {
-    if (e.target === lightbox) {
-      lightbox.classList.add('hidden');
-    }
+    if (e.target === lightbox) lightbox.classList.add('hidden');
   });
 }
 
-if (restartBtn) {
-  restartBtn.addEventListener('click', buildGame);
-}
-
-if (playAgainBtn) {
-  playAgainBtn.addEventListener('click', buildGame);
-}
+if (restartBtn) restartBtn.addEventListener('click', buildGame);
+if (playAgainBtn) playAgainBtn.addEventListener('click', buildGame);
 
 if (closeWin) {
-  closeWin.addEventListener('click', () => {
-    winModal.classList.add('hidden');
-  });
+  closeWin.addEventListener('click', () => winModal.classList.add('hidden'));
 }
 
 if (winModal) {
   winModal.addEventListener('click', (e) => {
-    if (e.target === winModal) {
-      winModal.classList.add('hidden');
-    }
+    if (e.target === winModal) winModal.classList.add('hidden');
   });
 }
-
-/* Init */
 
 setInterval(updateCountdown, 1000);
 updateCountdown();
