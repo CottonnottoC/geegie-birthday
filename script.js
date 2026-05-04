@@ -1,6 +1,6 @@
 const TARGET_DATE = new Date('2026-05-05T00:00:00+07:00');
 
-const TEST_MODE = true;
+const TEST_MODE = false;
 
 const imageMap = {
   'photo-letter-1': './booth1.MP4',
