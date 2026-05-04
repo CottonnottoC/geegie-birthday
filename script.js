@@ -5,26 +5,29 @@ const TARGET_DATE = new Date('2026-05-05T00:00:00+07:00');
 const TEST_MODE = true;
 
 const imageMap = {
-  'photo-letter-1': '',
-  'photo-letter-2': '',
-  'photo-letter-3': '',
-  'photo-letter-4': '',
+  'photo-letter-1': './booth1.MP4',
+  'photo-letter-2': './booth2.MP4',
+  'photo-letter-3': './booth3.MP4',
+  'photo-letter-4': './booth4.MP4',
+  'photo-letter-5': './booth5.MP4',
 
-  'gallery-photo-1': '',
-  'gallery-photo-2': '',
-  'gallery-photo-3': '',
-  'gallery-photo-4': '',
-  'gallery-photo-5': '',
-  'gallery-photo-6': '',
-  'gallery-photo-7': '',
-  'gallery-photo-8': '',
+  'gallery-photo-1': './gallery1.jpg',
+  'gallery-photo-2': './gallery2.jpg',
+  'gallery-photo-3': './gallery3.jpg',
+  'gallery-photo-4': './gallery4.jpg',
+  'gallery-photo-5': './gallery5.jpg',
+  'gallery-photo-6': './gallery6.jpg',
+  'gallery-photo-7': './gallery7.jpg',
+  'gallery-photo-8': './gallery8.jpg',
 
-  'geegie-card-1': '',
-  'geegie-card-2': '',
-  'geegie-card-3': '',
-  'geegie-card-4': '',
-  'geegie-card-5': '',
-  'geegie-card-6': ''
+  'geegie-card-1': './card1.jpg',
+  'geegie-card-2': './card2.jpg',
+  'geegie-card-3': './card3.jpg',
+  'geegie-card-4': './card4.jpg',
+  'geegie-card-5': './card5.jpg',
+  'geegie-card-6': './card6.jpg',
+  'geegie-card-7': './card7.jpg',
+  'geegie-card-8': './card8.jpg'
 };
 
 const captions = [
@@ -122,6 +125,26 @@ function createPhotoElement(name) {
   const src = imageMap[name];
 
   if (src) {
+    const isVideo = /\.(mp4|MP4|webm|mov|MOV)$/i.test(src);
+
+    if (isVideo) {
+      const video = document.createElement('video');
+      video.src = src;
+      video.className = 'photo-video';
+      video.autoplay = true;
+      video.muted = true;
+      video.loop = true;
+      video.playsInline = true;
+      video.preload = 'metadata';
+
+      video.setAttribute('autoplay', '');
+      video.setAttribute('muted', '');
+      video.setAttribute('loop', '');
+      video.setAttribute('playsinline', '');
+
+      return video;
+    }
+
     const img = document.createElement('img');
     img.src = src;
     img.alt = name;
@@ -136,7 +159,7 @@ function createPhotoElement(name) {
 }
 
 function fillLetterPhotos() {
-  document.querySelectorAll('.photo-slot').forEach((slot) => {
+  document.querySelectorAll('.photo-slot, .video-slot').forEach((slot) => {
     const photoName = slot.dataset.photo;
     slot.innerHTML = '';
     slot.appendChild(createPhotoElement(photoName));
@@ -195,12 +218,12 @@ function buildGame() {
   flipped = [];
   matchedCount = 0;
   lockBoard = false;
-  scoreText.textContent = 'คะแนน: 0 / 6';
+  scoreText.textContent = 'คะแนน: 0 / 8';
   winModal.classList.add('hidden');
 
   const pairs = [];
 
-  for (let i = 1; i <= 6; i++) {
+  for (let i = 1; i <= 8; i++) {
     pairs.push({
       id: `geegie-card-${i}`,
       pair: i
@@ -265,11 +288,11 @@ function checkMatch() {
     second.classList.add('matched');
 
     matchedCount++;
-    scoreText.textContent = `คะแนน: ${matchedCount} / 6`;
+    scoreText.textContent = `คะแนน: ${matchedCount} / 8`;
 
     flipped = [];
 
-    if (matchedCount === 6) {
+    if (matchedCount === 8) {
       setTimeout(() => {
         if (winModal) {
           winModal.classList.remove('hidden');
