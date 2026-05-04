@@ -1,12 +1,6 @@
 // ทดสอบให้ปุ่มขึ้นตอน 5 โมง 5 นาทีของวันนี้
-const TARGET_DATE = new Date(
-  nowForTarget.getFullYear(),
-  nowForTarget.getMonth(),
-  nowForTarget.getDate(),
-  18,
-  25,
-  0
-);
+// เปิดให้เข้าตอนวันที่ 5/5 เวลา 18:30 ตามเวลาไทย
+const TARGET_DATE = new Date('2026-05-05T18:30:00+07:00');
 
 const TEST_MODE = false;
 const imageMap = {
