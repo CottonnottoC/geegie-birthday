@@ -1,1 +1,144 @@
+<!DOCTYPE html>
+<html lang="th">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Happy Birthday Geegie 💗</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
 
+  <body>
+    <div class="bg-hearts" id="bgHearts"></div>
+
+    <main id="app">
+      <section id="lockScreen" class="screen active">
+        <div class="glass-card lock-card">
+          <p class="small-title">For Geegie 💗</p>
+          <h1>ยังเปิดไม่ได้น้า</h1>
+          <p class="subtitle">รอถึงวันเกิดของ Geegie ก่อนนะ</p>
+
+          <div class="countdown">
+            <div><span id="days">00</span><p>วัน</p></div>
+            <div><span id="hours">00</span><p>ชั่วโมง</p></div>
+            <div><span id="minutes">00</span><p>นาที</p></div>
+            <div><span id="seconds">00</span><p>วินาที</p></div>
+          </div>
+
+          <button id="enterBtn" class="main-btn hidden">เข้าไปดูของขวัญ 💌</button>
+          <p class="footer-note">Made with love by Cotton</p>
+        </div>
+      </section>
+
+      <section id="homeScreen" class="screen">
+        <div class="home-content">
+          <p class="small-title">May 5</p>
+          <h1>Happy Birthday<br />Geegie 💗</h1>
+          <p class="subtitle">from Cotton</p>
+
+          <button id="envelopeBtn" class="envelope">
+            <div class="envelope-flap"></div>
+            <div class="envelope-body">
+              <span>แตะเพื่อเปิด 💌</span>
+            </div>
+          </button>
+
+          <p class="hint">มีของขวัญเล็ก ๆ ซ่อนอยู่ในนี้น้า</p>
+        </div>
+      </section>
+
+      <section id="menuScreen" class="screen">
+        <div class="section-head">
+          <button class="back-home ghost-btn">← กลับหน้าแรก</button>
+          <h2>เลือกหมวดที่อยากเปิดดู 💗</h2>
+          <p>กดการ์ดแต่ละใบได้เลย</p>
+        </div>
+
+        <div class="category-grid">
+          <button class="category-card" data-target="letterScreen">
+            <span>💌</span>
+            <h3>จดหมายถึง Geegie</h3>
+            <p>ข้อความจาก Cotton</p>
+          </button>
+
+          <button class="category-card" data-target="galleryScreen">
+            <span>📸</span>
+            <h3>รูปของเรา</h3>
+            <p>รวมโมเมนต์น่ารัก ๆ</p>
+          </button>
+
+          <button class="category-card" data-target="gameScreen">
+            <span>🎴</span>
+            <h3>เกมจับคู่หน้า Geegie</h3>
+            <p>เปิดไพ่ให้ครบทุกคู่</p>
+          </button>
+        </div>
+      </section>
+
+      <section id="letterScreen" class="screen">
+        <div class="section-head">
+          <button class="back-menu ghost-btn">← กลับไปเลือกหมวด</button>
+          <h2>จดหมายถึง Geegie 💌</h2>
+        </div>
+
+        <div class="letter-layout">
+          <div class="polaroid floating-photo photo-slot" data-photo="photo-letter-1"></div>
+          <div class="polaroid floating-photo photo-slot" data-photo="photo-letter-2"></div>
+
+          <article class="letter-card">
+            <p>
+              “happy birthday naka รักทสนลเยยน้า ขอให้ปีนี้เป็นปีที่ดีที่สุดของทรเยย
+              เรียนเก่งๆ มีเงินเยอะๆ มีความสุขมากๆ แบกเค้าไปอีกสามปี ย้อเย่นน
+              ขอบคุณที่เข้ามาในชีวิตเค้าน้าาา อยู่ด้วยกันไปอีกนานๆเยย💗 “
+            </p>
+          </article>
+
+          <div class="polaroid floating-photo photo-slot" data-photo="photo-letter-3"></div>
+          <div class="polaroid floating-photo photo-slot" data-photo="photo-letter-4"></div>
+        </div>
+      </section>
+
+      <section id="galleryScreen" class="screen">
+        <div class="section-head">
+          <button class="back-menu ghost-btn">← กลับไปเลือกหมวด</button>
+          <h2>รูปของเรา 📸</h2>
+          <p>แตะรูปเพื่อดูแบบใหญ่</p>
+        </div>
+
+        <div id="galleryGrid" class="gallery-grid"></div>
+      </section>
+
+      <section id="gameScreen" class="screen">
+        <div class="section-head">
+          <button class="back-menu ghost-btn">← กลับไปเลือกหมวด</button>
+          <h2>เกมจับคู่หน้า Geegie 🎴</h2>
+          <p id="scoreText">คะแนน: 0 / 6</p>
+        </div>
+
+        <div id="gameBoard" class="game-board"></div>
+
+        <div class="center">
+          <button id="restartBtn" class="main-btn small">เล่นอีกครั้ง</button>
+        </div>
+      </section>
+    </main>
+
+    <div id="lightbox" class="modal hidden">
+      <div class="modal-card">
+        <button id="closeLightbox" class="close-btn">×</button>
+        <div id="lightboxContent"></div>
+      </div>
+    </div>
+
+    <div id="winModal" class="modal hidden">
+      <div class="modal-card win-card">
+        <button id="closeWin" class="close-btn">×</button>
+        <h2>เก่งมากกก 🎉</h2>
+        <p>ได้ของขวัญจาก Cotton แล้วน้า 💗</p>
+        <button id="playAgainBtn" class="main-btn small">เล่นอีกครั้ง</button>
+      </div>
+    </div>
+
+    <canvas id="confettiCanvas"></canvas>
+    <script src="script.js"></script>
+  </body>
+</html>
