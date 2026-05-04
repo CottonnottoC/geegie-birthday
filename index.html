@@ -11,6 +11,7 @@
     <div class="bg-hearts" id="bgHearts"></div>
 
     <main id="app">
+      <!-- Countdown Lock -->
       <section id="lockScreen" class="screen active">
         <div class="glass-card lock-card">
           <p class="small-title">For Geegie 💗</p>
@@ -18,17 +19,36 @@
           <p class="subtitle">รอถึงวันเกิดของ Geegie ก่อนนะ</p>
 
           <div class="countdown">
-            <div><span id="days">00</span><p>วัน</p></div>
-            <div><span id="hours">00</span><p>ชั่วโมง</p></div>
-            <div><span id="minutes">00</span><p>นาที</p></div>
-            <div><span id="seconds">00</span><p>วินาที</p></div>
+            <div>
+              <span id="days">00</span>
+              <p>วัน</p>
+            </div>
+
+            <div>
+              <span id="hours">00</span>
+              <p>ชั่วโมง</p>
+            </div>
+
+            <div>
+              <span id="minutes">00</span>
+              <p>นาที</p>
+            </div>
+
+            <div>
+              <span id="seconds">00</span>
+              <p>วินาที</p>
+            </div>
           </div>
 
-          <button id="enterBtn" class="main-btn hidden">เข้าไปดูของขวัญ 💌</button>
+          <button id="enterBtn" class="main-btn hidden">
+            เข้าไปดูของขวัญ 💌
+          </button>
+
           <p class="footer-note">Made with love by Cotton</p>
         </div>
       </section>
 
+      <!-- Birthday Home -->
       <section id="homeScreen" class="screen">
         <div class="home-content">
           <p class="small-title">May 5</p>
@@ -37,6 +57,7 @@
 
           <button id="envelopeBtn" class="envelope">
             <div class="envelope-flap"></div>
+
             <div class="envelope-body">
               <span>แตะเพื่อเปิด 💌</span>
             </div>
@@ -46,6 +67,7 @@
         </div>
       </section>
 
+      <!-- Category Menu -->
       <section id="menuScreen" class="screen">
         <div class="section-head">
           <button class="back-home ghost-btn">← กลับหน้าแรก</button>
@@ -74,6 +96,7 @@
         </div>
       </section>
 
+      <!-- Letter Section -->
       <section id="letterScreen" class="screen">
         <div class="section-head">
           <button class="back-menu ghost-btn">← กลับไปเลือกหมวด</button>
@@ -97,6 +120,7 @@
         </div>
       </section>
 
+      <!-- Gallery Section -->
       <section id="galleryScreen" class="screen">
         <div class="section-head">
           <button class="back-menu ghost-btn">← กลับไปเลือกหมวด</button>
@@ -107,6 +131,7 @@
         <div id="galleryGrid" class="gallery-grid"></div>
       </section>
 
+      <!-- Game Section -->
       <section id="gameScreen" class="screen">
         <div class="section-head">
           <button class="back-menu ghost-btn">← กลับไปเลือกหมวด</button>
@@ -122,6 +147,7 @@
       </section>
     </main>
 
+    <!-- Lightbox -->
     <div id="lightbox" class="modal hidden">
       <div class="modal-card">
         <button id="closeLightbox" class="close-btn">×</button>
@@ -129,6 +155,7 @@
       </div>
     </div>
 
+    <!-- Win Modal -->
     <div id="winModal" class="modal hidden">
       <div class="modal-card win-card">
         <button id="closeWin" class="close-btn">×</button>
@@ -139,6 +166,7 @@
     </div>
 
     <canvas id="confettiCanvas"></canvas>
-    <script src="./script.js?v=4"></script>
+
+    <script src="./script.js?v=100"></script>
   </body>
 </html>
