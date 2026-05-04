@@ -4,14 +4,13 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Happy Birthday Geegie 💗</title>
-    <link rel="stylesheet" href="./styles.css?v=3" />
+    <link rel="stylesheet" href="./styles.css?v=500" />
   </head>
 
   <body>
     <div class="bg-hearts" id="bgHearts"></div>
 
     <main id="app">
-      <!-- Countdown Lock -->
       <section id="lockScreen" class="screen active">
         <div class="glass-card lock-card">
           <p class="small-title">For Geegie 💗</p>
@@ -23,17 +22,14 @@
               <span id="days">00</span>
               <p>วัน</p>
             </div>
-
             <div>
               <span id="hours">00</span>
               <p>ชั่วโมง</p>
             </div>
-
             <div>
               <span id="minutes">00</span>
               <p>นาที</p>
             </div>
-
             <div>
               <span id="seconds">00</span>
               <p>วินาที</p>
@@ -48,7 +44,6 @@
         </div>
       </section>
 
-      <!-- Birthday Home -->
       <section id="homeScreen" class="screen">
         <div class="home-content">
           <p class="small-title">May 5</p>
@@ -57,7 +52,6 @@
 
           <button id="envelopeBtn" class="envelope">
             <div class="envelope-flap"></div>
-
             <div class="envelope-body">
               <span>แตะเพื่อเปิด 💌</span>
             </div>
@@ -67,7 +61,6 @@
         </div>
       </section>
 
-      <!-- Category Menu -->
       <section id="menuScreen" class="screen">
         <div class="section-head">
           <button class="back-home ghost-btn">← กลับหน้าแรก</button>
@@ -96,7 +89,6 @@
         </div>
       </section>
 
-      <!-- Letter Section -->
       <section id="letterScreen" class="screen">
         <div class="section-head">
           <button class="back-menu ghost-btn">← กลับไปเลือกหมวด</button>
@@ -104,8 +96,8 @@
         </div>
 
         <div class="letter-layout">
-          <div class="polaroid floating-photo photo-slot" data-photo="photo-letter-1"></div>
-          <div class="polaroid floating-photo photo-slot" data-photo="photo-letter-2"></div>
+          <div class="polaroid floating-photo video-slot slot-one" data-photo="photo-letter-1"></div>
+          <div class="polaroid floating-photo video-slot slot-two" data-photo="photo-letter-2"></div>
 
           <article class="letter-card">
             <p>
@@ -115,12 +107,12 @@
             </p>
           </article>
 
-          <div class="polaroid floating-photo photo-slot" data-photo="photo-letter-3"></div>
-          <div class="polaroid floating-photo photo-slot" data-photo="photo-letter-4"></div>
+          <div class="polaroid floating-photo video-slot slot-three" data-photo="photo-letter-3"></div>
+          <div class="polaroid floating-photo video-slot slot-four" data-photo="photo-letter-4"></div>
+          <div class="polaroid floating-photo video-slot slot-five" data-photo="photo-letter-5"></div>
         </div>
       </section>
 
-      <!-- Gallery Section -->
       <section id="galleryScreen" class="screen">
         <div class="section-head">
           <button class="back-menu ghost-btn">← กลับไปเลือกหมวด</button>
@@ -131,12 +123,11 @@
         <div id="galleryGrid" class="gallery-grid"></div>
       </section>
 
-      <!-- Game Section -->
       <section id="gameScreen" class="screen">
         <div class="section-head">
           <button class="back-menu ghost-btn">← กลับไปเลือกหมวด</button>
           <h2>เกมจับคู่หน้า Geegie 🎴</h2>
-          <p id="scoreText">คะแนน: 0 / 6</p>
+          <p id="scoreText">คะแนน: 0 / 8</p>
         </div>
 
         <div id="gameBoard" class="game-board"></div>
@@ -147,7 +138,6 @@
       </section>
     </main>
 
-    <!-- Lightbox -->
     <div id="lightbox" class="modal hidden">
       <div class="modal-card">
         <button id="closeLightbox" class="close-btn">×</button>
@@ -155,7 +145,6 @@
       </div>
     </div>
 
-    <!-- Win Modal -->
     <div id="winModal" class="modal hidden">
       <div class="modal-card win-card">
         <button id="closeWin" class="close-btn">×</button>
@@ -167,6 +156,6 @@
 
     <canvas id="confettiCanvas"></canvas>
 
-    <script src="./script.js?v=100"></script>
+    <script src="./script.js?v=500"></script>
   </body>
 </html>
