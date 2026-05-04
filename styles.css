@@ -7,7 +7,7 @@
   --cream: #fff7ec;
   --white: #ffffff;
   --brown: #7a4b5b;
-  --shadow: 0 20px 60px rgba(255, 95, 162, 0.22);
+  --shadow: 0 20px 60px rgba(255, 95, 162, 0.2);
 }
 
 * {
@@ -23,8 +23,7 @@ body {
   background:
     radial-gradient(circle at 20% 10%, #fff 0, transparent 25%),
     radial-gradient(circle at 85% 20%, #ffe4f0 0, transparent 28%),
-    radial-gradient(circle at 15% 85%, rgba(255, 180, 210, 0.35) 0, transparent 30%),
-    radial-gradient(circle at 90% 75%, rgba(255, 214, 232, 0.4) 0, transparent 35%),
+    radial-gradient(circle at 15% 85%, rgba(255, 180, 210, 0.25) 0, transparent 30%),
     linear-gradient(135deg, #fff7ec 0%, #ffe0ef 45%, #fff3f8 100%);
   overflow-x: hidden;
 }
@@ -64,10 +63,9 @@ button {
   width: min(560px, 100%);
   padding: 32px 22px;
   border-radius: 34px;
-  background: rgba(255, 255, 255, 0.72);
+  background: rgba(255, 255, 255, 0.76);
   border: 1px solid rgba(255, 255, 255, 0.9);
   box-shadow: var(--shadow);
-  backdrop-filter: blur(16px);
   text-align: center;
 }
 
@@ -161,7 +159,7 @@ h3 {
   align-self: flex-start;
   padding: 10px 15px;
   border-radius: 999px;
-  background: rgba(255, 255, 255, 0.72);
+  background: rgba(255, 255, 255, 0.78);
   color: var(--hot);
   font-weight: 700;
   box-shadow: 0 8px 20px rgba(255, 95, 162, 0.12);
@@ -186,7 +184,7 @@ h3 {
   border: 0;
   background: transparent;
   cursor: pointer;
-  filter: drop-shadow(0 22px 35px rgba(255, 95, 162, 0.26));
+  filter: drop-shadow(0 22px 35px rgba(255, 95, 162, 0.22));
   transition: 0.25s ease;
 }
 
@@ -272,7 +270,7 @@ h3 {
   padding: 24px 18px;
   border: 0;
   border-radius: 30px;
-  background: rgba(255, 255, 255, 0.74);
+  background: rgba(255, 255, 255, 0.78);
   color: var(--brown);
   box-shadow: var(--shadow);
   cursor: pointer;
@@ -534,7 +532,6 @@ h3 {
   padding: 18px;
   z-index: 40;
   animation: fadeIn 0.2s ease;
-  backdrop-filter: blur(8px);
 }
 
 .modal-card {
@@ -584,7 +581,7 @@ h3 {
   position: fixed;
   inset: 0;
   overflow: hidden;
-  z-index: 30;
+  z-index: 45;
   pointer-events: none;
 }
 
@@ -593,26 +590,26 @@ h3 {
   content: '';
   position: absolute;
   border-radius: 999px;
-  filter: blur(60px);
-  opacity: 0.55;
+  filter: blur(30px);
+  opacity: 0.35;
   animation: blobFloat 12s ease-in-out infinite alternate;
   pointer-events: none;
 }
 
 .bg-hearts::before {
-  width: 240px;
-  height: 240px;
+  width: 220px;
+  height: 220px;
   left: -40px;
   top: 8%;
-  background: radial-gradient(circle, rgba(255, 163, 205, 0.8), rgba(255, 163, 205, 0));
+  background: radial-gradient(circle, rgba(255, 163, 205, 0.7), rgba(255, 163, 205, 0));
 }
 
 .bg-hearts::after {
-  width: 280px;
-  height: 280px;
+  width: 250px;
+  height: 250px;
   right: -60px;
   bottom: 10%;
-  background: radial-gradient(circle, rgba(255, 208, 228, 0.85), rgba(255, 208, 228, 0));
+  background: radial-gradient(circle, rgba(255, 208, 228, 0.75), rgba(255, 208, 228, 0));
   animation-delay: 2s;
 }
 
@@ -621,19 +618,21 @@ h3 {
   bottom: -10vh;
   border: 0;
   background: transparent;
-  padding: 8px;
+  padding: 14px;
   margin: 0;
   line-height: 1;
   user-select: none;
   pointer-events: auto;
   cursor: pointer;
-  z-index: 35;
-  filter: drop-shadow(0 6px 14px rgba(255, 95, 162, 0.28));
+  z-index: 999;
   transform-origin: center;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
   animation:
     floatUp var(--float-duration, 12s) linear forwards,
     sway var(--sway-duration, 4s) ease-in-out infinite;
   animation-delay: var(--delay, 0s), var(--delay, 0s);
+  will-change: transform, opacity;
 }
 
 .heart.pop {
@@ -645,9 +644,8 @@ h3 {
 
 .sparkle {
   position: absolute;
-  color: rgba(255, 120, 180, 0.75);
+  color: rgba(255, 120, 180, 0.65);
   pointer-events: none;
-  filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.8));
   animation: twinkle var(--twinkle-duration, 4s) ease-in-out infinite;
 }
 
@@ -655,16 +653,16 @@ h3 {
   position: fixed;
   line-height: 1;
   pointer-events: none;
-  z-index: 80;
+  z-index: 1000;
   transform: translate(-50%, -50%) scale(0.7);
   opacity: 1;
   transition:
-    transform 0.8s cubic-bezier(0.18, 0.85, 0.2, 1),
-    opacity 0.8s ease;
+    transform 0.75s cubic-bezier(0.18, 0.85, 0.2, 1),
+    opacity 0.75s ease;
 }
 
 .burst-particle.animate {
-  transform: translate(calc(-50% + var(--dx, 0px)), calc(-50% + var(--dy, 0px))) scale(1.4) rotate(var(--rot, 0deg));
+  transform: translate(calc(-50% + var(--dx, 0px)), calc(-50% + var(--dy, 0px))) scale(1.35) rotate(var(--rot, 0deg));
   opacity: 0;
 }
 
@@ -674,7 +672,7 @@ h3 {
   }
 
   to {
-    transform: translateY(-18px) translateX(14px) scale(1.08);
+    transform: translateY(-18px) translateX(14px) scale(1.06);
   }
 }
 
@@ -684,7 +682,7 @@ h3 {
   }
 
   50% {
-    margin-left: 14px;
+    margin-left: 12px;
   }
 
   100% {
@@ -716,8 +714,8 @@ h3 {
   }
 
   50% {
-    opacity: 0.95;
-    transform: scale(1.2);
+    opacity: 0.9;
+    transform: scale(1.15);
   }
 }
 
@@ -730,6 +728,19 @@ h3 {
   to {
     opacity: 1;
     transform: translateY(0);
+  }
+}
+
+@media (max-width: 900px) {
+  .glass-card,
+  .letter-card,
+  .modal {
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+  }
+
+  .heart {
+    font-size: 24px !important;
   }
 }
 
