@@ -64,7 +64,21 @@ function showScreen(id) {
   const targetScreen = document.getElementById(id);
   if (targetScreen) targetScreen.classList.add('active');
 
+  updateVideoPlayback();
+
   window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function updateVideoPlayback() {
+  document.querySelectorAll('video.photo-video').forEach((video) => {
+    const screen = video.closest('.screen');
+
+    if (screen && screen.classList.contains('active')) {
+      video.play().catch(() => {});
+    } else {
+      video.pause();
+    }
+  });
 }
 
 function pad(num) {
@@ -145,19 +159,18 @@ function createPhotoElement(name) {
       const video = document.createElement('video');
       video.src = src;
       video.className = 'photo-video';
-      video.autoplay = true;
       video.muted = true;
       video.loop = true;
       video.playsInline = true;
       video.preload = 'metadata';
 
-      video.setAttribute('autoplay', '');
       video.setAttribute('muted', '');
       video.setAttribute('loop', '');
       video.setAttribute('playsinline', '');
 
       video.addEventListener('loadedmetadata', () => {
         setFrameToVideoRatio(video);
+        updateVideoPlayback();
       });
 
       return video;
@@ -319,17 +332,17 @@ function randomItem(array) {
 function createSparkles() {
   if (!bgHearts) return;
 
-  const sparkleSymbols = ['✨', '✦', '✧', '⋆'];
+  const sparkleSymbols = ['✨', '✦', '✧'];
 
-  for (let i = 0; i < 18; i++) {
+  for (let i = 0; i < 7; i++) {
     const sparkle = document.createElement('span');
 
     sparkle.className = 'sparkle';
     sparkle.textContent = randomItem(sparkleSymbols);
     sparkle.style.left = `${randomBetween(0, 100)}%`;
     sparkle.style.top = `${randomBetween(0, 100)}%`;
-    sparkle.style.fontSize = `${randomBetween(10, 22)}px`;
-    sparkle.style.setProperty('--twinkle-duration', `${randomBetween(2.5, 5.5)}s`);
+    sparkle.style.fontSize = `${randomBetween(10, 18)}px`;
+    sparkle.style.setProperty('--twinkle-duration', `${randomBetween(3, 6)}s`);
     sparkle.style.animationDelay = `${randomBetween(0, 4)}s`;
 
     bgHearts.appendChild(sparkle);
@@ -348,27 +361,25 @@ function addOneHeart(options = {}) {
   heart.textContent = randomItem(['💗', '💕', '💖', '💘', '💞']);
 
   heart.style.left = `${randomBetween(0, 100)}%`;
-  heart.style.fontSize = `${randomBetween(20, 38)}px`;
+  heart.style.fontSize = `${randomBetween(20, 32)}px`;
   heart.style.opacity = `${randomBetween(0.65, 1)}`;
-  heart.style.setProperty('--float-duration', `${randomBetween(10, 17)}s`);
-  heart.style.setProperty('--sway-duration', `${randomBetween(2.8, 5.2)}s`);
+  heart.style.setProperty('--float-duration', `${randomBetween(12, 20)}s`);
+  heart.style.setProperty('--sway-duration', `${randomBetween(3.5, 6)}s`);
   heart.style.setProperty('--delay', `${initialDelay}s`);
 
   if (startRandomY) {
     heart.style.bottom = `${randomBetween(-8, 92)}vh`;
   }
 
-  heart.addEventListener('pointerdown', (e) => {
+  const handlePop = (e) => {
     e.preventDefault();
     e.stopPropagation();
     popHeart(heart);
-  });
+  };
 
-  heart.addEventListener('click', (e) => {
-    e.preventDefault();
-    e.stopPropagation();
-    popHeart(heart);
-  });
+  heart.addEventListener('touchstart', handlePop, { passive: false });
+  heart.addEventListener('pointerdown', handlePop);
+  heart.addEventListener('click', handlePop);
 
   heart.addEventListener('animationend', (e) => {
     if (e.animationName === 'floatUp' && heart.isConnected) {
@@ -381,7 +392,7 @@ function addOneHeart(options = {}) {
 }
 
 function spawnHeartBurst(x, y) {
-  const particles = 14;
+  const particles = 10;
   const burstSymbols = ['💗', '💕', '✨', '💖', '💘'];
 
   for (let i = 0; i < particles; i++) {
@@ -391,16 +402,16 @@ function spawnHeartBurst(x, y) {
     piece.textContent = randomItem(burstSymbols);
     piece.style.left = `${x}px`;
     piece.style.top = `${y}px`;
-    piece.style.fontSize = `${randomBetween(13, 24)}px`;
-    piece.style.setProperty('--dx', `${randomBetween(-105, 105)}px`);
-    piece.style.setProperty('--dy', `${randomBetween(-105, 105)}px`);
+    piece.style.fontSize = `${randomBetween(13, 22)}px`;
+    piece.style.setProperty('--dx', `${randomBetween(-95, 95)}px`);
+    piece.style.setProperty('--dy', `${randomBetween(-95, 95)}px`);
     piece.style.setProperty('--rot', `${randomBetween(-180, 180)}deg`);
 
     document.body.appendChild(piece);
 
     requestAnimationFrame(() => piece.classList.add('animate'));
 
-    setTimeout(() => piece.remove(), 850);
+    setTimeout(() => piece.remove(), 780);
   }
 }
 
@@ -426,9 +437,9 @@ function createFloatingHearts() {
   bgHearts.innerHTML = '';
   createSparkles();
 
-  for (let i = 0; i < 38; i++) {
+  for (let i = 0; i < 14; i++) {
     addOneHeart({
-      initialDelay: randomBetween(0, 10),
+      initialDelay: randomBetween(0, 8),
       startRandomY: true
     });
   }
@@ -444,7 +455,7 @@ function confettiBurst() {
   canvas.width = window.innerWidth;
   canvas.height = window.innerHeight;
 
-  const pieces = Array.from({ length: 120 }, () => ({
+  const pieces = Array.from({ length: 80 }, () => ({
     x: Math.random() * canvas.width,
     y: -20 - Math.random() * canvas.height * 0.3,
     size: 5 + Math.random() * 7,
@@ -480,7 +491,7 @@ function confettiBurst() {
 
     frame++;
 
-    if (frame < 150) requestAnimationFrame(draw);
+    if (frame < 120) requestAnimationFrame(draw);
     else ctx.clearRect(0, 0, canvas.width, canvas.height);
   }
 
@@ -547,5 +558,6 @@ fillLetterPhotos();
 buildGallery();
 buildGame();
 createFloatingHearts();
+updateVideoPlayback();
 
 console.log('Geegie birthday script loaded');
