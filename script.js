@@ -3,11 +3,11 @@ const TARGET_DATE = new Date('2026-05-05T00:00:00+07:00');
 const TEST_MODE = true;
 
 const imageMap = {
-  'photo-letter-1': './booth1.mp4.MP4',
-  'photo-letter-2': './booth2.mp4.MP4',
-  'photo-letter-3': './booth3.mp4.MP4',
-  'photo-letter-4': './booth4.mp4.MP4',
-  'photo-letter-5': './booth5.mp4.MP4',
+  'photo-letter-1': './booth1.MP4',
+  'photo-letter-2': './booth2.MP4',
+  'photo-letter-3': './booth3.MP4',
+  'photo-letter-4': './booth4.MP4',
+  'photo-letter-5': './booth5.MP4',
 
   'gallery-photo-1': './gallery1.jpg',
   'gallery-photo-2': './gallery2.jpg',
@@ -111,21 +111,25 @@ function setFrameToVideoRatio(video) {
   if (!w || !h) return;
 
   const ratio = w / h;
+
   frame.classList.toggle('is-landscape', ratio > 1.15);
 
-  let frameW;
-  let frameH;
+  let mediaW;
+  let mediaH;
 
   if (ratio > 1.15) {
-    frameW = 320;
-    frameH = Math.round(frameW / ratio) + 44;
+    mediaW = 320;
+    mediaH = Math.round(mediaW / ratio);
   } else if (ratio < 0.85) {
-    frameH = 285;
-    frameW = Math.round((frameH - 44) * ratio) + 20;
+    mediaH = 285;
+    mediaW = Math.round(mediaH * ratio);
   } else {
-    frameW = 245;
-    frameH = 245 + 44;
+    mediaW = 245;
+    mediaH = 245;
   }
+
+  const frameW = mediaW + 20;
+  const frameH = mediaH + 44;
 
   frame.style.setProperty('--frame-w', `${frameW}px`);
   frame.style.setProperty('--frame-h', `${frameH}px`);
@@ -360,6 +364,12 @@ function addOneHeart(options = {}) {
     popHeart(heart);
   });
 
+  heart.addEventListener('click', (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    popHeart(heart);
+  });
+
   heart.addEventListener('animationend', (e) => {
     if (e.animationName === 'floatUp' && heart.isConnected) {
       heart.remove();
@@ -371,7 +381,7 @@ function addOneHeart(options = {}) {
 }
 
 function spawnHeartBurst(x, y) {
-  const particles = 12;
+  const particles = 14;
   const burstSymbols = ['💗', '💕', '✨', '💖', '💘'];
 
   for (let i = 0; i < particles; i++) {
@@ -382,8 +392,8 @@ function spawnHeartBurst(x, y) {
     piece.style.left = `${x}px`;
     piece.style.top = `${y}px`;
     piece.style.fontSize = `${randomBetween(13, 24)}px`;
-    piece.style.setProperty('--dx', `${randomBetween(-95, 95)}px`);
-    piece.style.setProperty('--dy', `${randomBetween(-95, 95)}px`);
+    piece.style.setProperty('--dx', `${randomBetween(-105, 105)}px`);
+    piece.style.setProperty('--dy', `${randomBetween(-105, 105)}px`);
     piece.style.setProperty('--rot', `${randomBetween(-180, 180)}deg`);
 
     document.body.appendChild(piece);
@@ -395,6 +405,8 @@ function spawnHeartBurst(x, y) {
 }
 
 function popHeart(heart) {
+  if (!heart || heart.classList.contains('pop')) return;
+
   const rect = heart.getBoundingClientRect();
   const centerX = rect.left + rect.width / 2;
   const centerY = rect.top + rect.height / 2;
@@ -487,7 +499,6 @@ if (enterBtn) {
 if (envelopeBtn) {
   envelopeBtn.addEventListener('click', () => {
     envelopeBtn.classList.add('open');
-
     setTimeout(() => showScreen('menuScreen'), 650);
   });
 }
