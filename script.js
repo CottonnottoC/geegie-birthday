@@ -1,16 +1,7 @@
 // ทดสอบให้ปุ่มขึ้นตอน 5 โมง 5 นาทีของวันนี้
-const nowForTarget = new Date();
-const TARGET_DATE = new Date(
-  nowForTarget.getFullYear(),
-  nowForTarget.getMonth(),
-  nowForTarget.getDate(),
-  17,
-  5,
-  0
-);
+const TARGET_DATE = new Date('2026-05-05T00:00:00+07:00');
 
 const TEST_MODE = false;
-
 const imageMap = {
   'photo-letter-1': './booth1.MP4',
   'photo-letter-2': './booth2.MP4',
