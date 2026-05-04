@@ -1,7 +1,7 @@
 const TARGET_DATE = new Date('2026-05-05T00:00:00+07:00');
 
-// ตอนลองเว็บเอง เปลี่ยนเป็น true
-// ตอนส่งให้แฟนจริง ต้องเปลี่ยนกลับเป็น false
+// ตอนนี้ตั้งเป็น true เพื่อให้ลองดูข้างในได้เลย
+// ตอนจะส่งให้แฟนจริง ค่อยเปลี่ยนเป็น false
 const TEST_MODE = true;
 
 const imageMap = {
@@ -63,9 +63,19 @@ const winModal = document.getElementById('winModal');
 const closeWin = document.getElementById('closeWin');
 
 function showScreen(id) {
-  screens.forEach((screen) => screen.classList.remove('active'));
-  document.getElementById(id).classList.add('active');
-  window.scrollTo({ top: 0, behavior: 'smooth' });
+  screens.forEach((screen) => {
+    screen.classList.remove('active');
+  });
+
+  const targetScreen = document.getElementById(id);
+  if (targetScreen) {
+    targetScreen.classList.add('active');
+  }
+
+  window.scrollTo({
+    top: 0,
+    behavior: 'smooth'
+  });
 }
 
 function pad(num) {
@@ -73,6 +83,8 @@ function pad(num) {
 }
 
 function updateCountdown() {
+  if (!enterBtn || !daysEl || !hoursEl || !minutesEl || !secondsEl) return;
+
   if (TEST_MODE) {
     enterBtn.classList.remove('hidden');
     daysEl.textContent = '00';
@@ -106,36 +118,6 @@ function updateCountdown() {
   secondsEl.textContent = pad(seconds);
 }
 
-setInterval(updateCountdown, 1000);
-updateCountdown();
-
-enterBtn.addEventListener('click', () => {
-  showScreen('homeScreen');
-  confettiBurst();
-});
-
-envelopeBtn.addEventListener('click', () => {
-  envelopeBtn.classList.add('open');
-
-  setTimeout(() => {
-    showScreen('menuScreen');
-  }, 650);
-});
-
-document.querySelectorAll('.category-card').forEach((card) => {
-  card.addEventListener('click', () => {
-    showScreen(card.dataset.target);
-  });
-});
-
-document.querySelectorAll('.back-menu').forEach((btn) => {
-  btn.addEventListener('click', () => showScreen('menuScreen'));
-});
-
-document.querySelectorAll('.back-home').forEach((btn) => {
-  btn.addEventListener('click', () => showScreen('homeScreen'));
-});
-
 function createPhotoElement(name) {
   const src = imageMap[name];
 
@@ -162,6 +144,8 @@ function fillLetterPhotos() {
 }
 
 function buildGallery() {
+  if (!galleryGrid) return;
+
   galleryGrid.innerHTML = '';
 
   for (let i = 1; i <= 8; i++) {
@@ -172,6 +156,7 @@ function buildGallery() {
     item.style.setProperty('--r', i % 2 === 0 ? '2deg' : '-2deg');
 
     const photo = createPhotoElement(name);
+
     const cap = document.createElement('p');
     cap.className = 'gallery-caption';
     cap.textContent = captions[i - 1];
@@ -188,22 +173,13 @@ function buildGallery() {
 }
 
 function openLightbox(name) {
+  if (!lightbox || !lightboxContent) return;
+
   lightboxContent.innerHTML = '';
   lightboxContent.appendChild(createPhotoElement(name));
   lightbox.classList.remove('hidden');
 }
 
-closeLightbox.addEventListener('click', () => {
-  lightbox.classList.add('hidden');
-});
-
-lightbox.addEventListener('click', (e) => {
-  if (e.target === lightbox) {
-    lightbox.classList.add('hidden');
-  }
-});
-
-let cards = [];
 let flipped = [];
 let matchedCount = 0;
 let lockBoard = false;
@@ -213,6 +189,8 @@ function shuffle(array) {
 }
 
 function buildGame() {
+  if (!gameBoard || !scoreText || !winModal) return;
+
   gameBoard.innerHTML = '';
   flipped = [];
   matchedCount = 0;
@@ -223,11 +201,18 @@ function buildGame() {
   const pairs = [];
 
   for (let i = 1; i <= 6; i++) {
-    pairs.push({ id: `geegie-card-${i}`, pair: i });
-    pairs.push({ id: `geegie-card-${i}`, pair: i });
+    pairs.push({
+      id: `geegie-card-${i}`,
+      pair: i
+    });
+
+    pairs.push({
+      id: `geegie-card-${i}`,
+      pair: i
+    });
   }
 
-  cards = shuffle(pairs);
+  const cards = shuffle(pairs);
 
   cards.forEach((cardData, index) => {
     const card = document.createElement('button');
@@ -245,7 +230,10 @@ function buildGame() {
     const back = card.querySelector('.card-back');
     back.appendChild(createPhotoElement(cardData.id));
 
-    card.addEventListener('click', () => flipCard(card));
+    card.addEventListener('click', () => {
+      flipCard(card);
+    });
+
     gameBoard.appendChild(card);
   });
 }
@@ -265,19 +253,28 @@ function flipCard(card) {
 }
 
 function checkMatch() {
-  const [first, second] = flipped;
+  const first = flipped[0];
+  const second = flipped[1];
+
+  if (!first || !second) return;
+
   const isMatch = first.dataset.pair === second.dataset.pair;
 
   if (isMatch) {
     first.classList.add('matched');
     second.classList.add('matched');
+
     matchedCount++;
     scoreText.textContent = `คะแนน: ${matchedCount} / 6`;
+
     flipped = [];
 
     if (matchedCount === 6) {
       setTimeout(() => {
-        winModal.classList.remove('hidden');
+        if (winModal) {
+          winModal.classList.remove('hidden');
+        }
+
         confettiBurst();
       }, 500);
     }
@@ -287,27 +284,18 @@ function checkMatch() {
     setTimeout(() => {
       first.classList.remove('flipped');
       second.classList.remove('flipped');
+
       flipped = [];
       lockBoard = false;
     }, 800);
   }
 }
 
-restartBtn.addEventListener('click', buildGame);
-playAgainBtn.addEventListener('click', buildGame);
-
-closeWin.addEventListener('click', () => {
-  winModal.classList.add('hidden');
-});
-
-winModal.addEventListener('click', (e) => {
-  if (e.target === winModal) {
-    winModal.classList.add('hidden');
-  }
-});
-
 function createFloatingHearts() {
   const bg = document.getElementById('bgHearts');
+  if (!bg) return;
+
+  bg.innerHTML = '';
 
   for (let i = 0; i < 28; i++) {
     const heart = document.createElement('div');
@@ -317,13 +305,17 @@ function createFloatingHearts() {
     heart.style.fontSize = `${14 + Math.random() * 24}px`;
     heart.style.animationDuration = `${7 + Math.random() * 9}s`;
     heart.style.animationDelay = `${Math.random() * 8}s`;
+
     bg.appendChild(heart);
   }
 }
 
 function confettiBurst() {
   const canvas = document.getElementById('confettiCanvas');
+  if (!canvas) return;
+
   const ctx = canvas.getContext('2d');
+  if (!ctx) return;
 
   canvas.width = window.innerWidth;
   canvas.height = window.innerHeight;
@@ -374,9 +366,85 @@ function confettiBurst() {
   draw();
 }
 
+if (enterBtn) {
+  enterBtn.classList.remove('hidden');
+
+  enterBtn.addEventListener('click', () => {
+    showScreen('homeScreen');
+    confettiBurst();
+  });
+}
+
+if (envelopeBtn) {
+  envelopeBtn.addEventListener('click', () => {
+    envelopeBtn.classList.add('open');
+
+    setTimeout(() => {
+      showScreen('menuScreen');
+    }, 650);
+  });
+}
+
+document.querySelectorAll('.category-card').forEach((card) => {
+  card.addEventListener('click', () => {
+    showScreen(card.dataset.target);
+  });
+});
+
+document.querySelectorAll('.back-menu').forEach((btn) => {
+  btn.addEventListener('click', () => {
+    showScreen('menuScreen');
+  });
+});
+
+document.querySelectorAll('.back-home').forEach((btn) => {
+  btn.addEventListener('click', () => {
+    showScreen('homeScreen');
+  });
+});
+
+if (closeLightbox) {
+  closeLightbox.addEventListener('click', () => {
+    lightbox.classList.add('hidden');
+  });
+}
+
+if (lightbox) {
+  lightbox.addEventListener('click', (e) => {
+    if (e.target === lightbox) {
+      lightbox.classList.add('hidden');
+    }
+  });
+}
+
+if (restartBtn) {
+  restartBtn.addEventListener('click', buildGame);
+}
+
+if (playAgainBtn) {
+  playAgainBtn.addEventListener('click', buildGame);
+}
+
+if (closeWin) {
+  closeWin.addEventListener('click', () => {
+    winModal.classList.add('hidden');
+  });
+}
+
+if (winModal) {
+  winModal.addEventListener('click', (e) => {
+    if (e.target === winModal) {
+      winModal.classList.add('hidden');
+    }
+  });
+}
+
+setInterval(updateCountdown, 1000);
+updateCountdown();
+
 fillLetterPhotos();
 buildGallery();
 buildGame();
 createFloatingHearts();
 
-document.getElementById('enterBtn').classList.remove('hidden');
+console.log('Geegie birthday script loaded');
