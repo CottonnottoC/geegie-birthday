@@ -23,6 +23,8 @@ body {
   background:
     radial-gradient(circle at 20% 10%, #fff 0, transparent 25%),
     radial-gradient(circle at 85% 20%, #ffe4f0 0, transparent 28%),
+    radial-gradient(circle at 15% 85%, rgba(255, 180, 210, 0.35) 0, transparent 30%),
+    radial-gradient(circle at 90% 75%, rgba(255, 214, 232, 0.4) 0, transparent 35%),
     linear-gradient(135deg, #fff7ec 0%, #ffe0ef 45%, #fff3f8 100%);
   overflow-x: hidden;
 }
@@ -33,7 +35,7 @@ button {
 
 #app {
   position: relative;
-  z-index: 2;
+  z-index: 10;
 }
 
 .screen {
@@ -41,12 +43,17 @@ button {
   display: none;
   padding: 28px 18px;
   animation: fadeIn 0.45s ease;
+  pointer-events: none;
 }
 
 .screen.active {
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+.screen > * {
+  pointer-events: auto;
 }
 
 .hidden {
@@ -285,9 +292,9 @@ h3 {
 
 .letter-layout {
   position: relative;
-  width: min(1080px, 100%);
+  width: min(1120px, 100%);
   margin: 0 auto;
-  min-height: 640px;
+  min-height: 680px;
   display: grid;
   place-items: center;
 }
@@ -321,16 +328,30 @@ h3 {
 
 .floating-photo {
   position: absolute;
-  width: 160px;
-  height: 190px;
   z-index: 1;
 }
 
 .video-slot {
-  width: 185px;
-  height: 265px;
+  width: 190px;
+  height: 270px;
   padding: 10px 10px 32px;
   overflow: hidden;
+  transition: width 0.25s ease, height 0.25s ease, transform 0.25s ease;
+}
+
+.video-slot.video-portrait {
+  width: 190px;
+  height: 270px;
+}
+
+.video-slot.video-landscape {
+  width: 320px;
+  height: 220px;
+}
+
+.video-slot.video-square {
+  width: 235px;
+  height: 235px;
 }
 
 .slot-one {
@@ -347,21 +368,47 @@ h3 {
 
 .slot-three {
   left: 8% !important;
-  bottom: 3% !important;
+  bottom: 4% !important;
   transform: rotate(7deg) !important;
 }
 
 .slot-four {
   right: 9% !important;
-  bottom: 5% !important;
+  bottom: 6% !important;
   transform: rotate(-8deg) !important;
 }
 
 .slot-five {
   left: 50% !important;
-  bottom: -10% !important;
+  bottom: -8% !important;
   transform: translateX(-50%) rotate(3deg) !important;
   z-index: 2;
+}
+
+.slot-one.video-landscape {
+  left: 1% !important;
+  top: 9% !important;
+}
+
+.slot-two.video-landscape {
+  right: 1% !important;
+  top: 9% !important;
+}
+
+.slot-three.video-landscape {
+  left: 2% !important;
+  bottom: 7% !important;
+}
+
+.slot-four.video-landscape {
+  right: 2% !important;
+  bottom: 7% !important;
+}
+
+.slot-five.video-landscape {
+  left: 50% !important;
+  bottom: -5% !important;
+  transform: translateX(-50%) rotate(3deg) !important;
 }
 
 .photo-placeholder {
@@ -395,7 +442,7 @@ h3 {
   width: 100%;
   height: 100%;
   min-height: 110px;
-  object-fit: contain;
+  object-fit: cover;
   object-position: center center;
   background: #fff0f7;
   border-radius: 12px;
@@ -511,7 +558,7 @@ h3 {
   display: grid;
   place-items: center;
   padding: 18px;
-  z-index: 20;
+  z-index: 30;
   animation: fadeIn 0.2s ease;
   backdrop-filter: blur(8px);
 }
@@ -559,34 +606,148 @@ h3 {
   z-index: 40;
 }
 
+/* Fancy clickable heart background */
+
 .bg-hearts {
   position: fixed;
   inset: 0;
-  pointer-events: none;
   overflow: hidden;
-  z-index: 1;
+  z-index: 6;
+}
+
+.bg-hearts::before,
+.bg-hearts::after {
+  content: '';
+  position: absolute;
+  border-radius: 999px;
+  filter: blur(60px);
+  opacity: 0.55;
+  animation: blobFloat 12s ease-in-out infinite alternate;
+  pointer-events: none;
+}
+
+.bg-hearts::before {
+  width: 240px;
+  height: 240px;
+  left: -40px;
+  top: 8%;
+  background: radial-gradient(circle, rgba(255, 163, 205, 0.8), rgba(255, 163, 205, 0));
+}
+
+.bg-hearts::after {
+  width: 280px;
+  height: 280px;
+  right: -60px;
+  bottom: 10%;
+  background: radial-gradient(circle, rgba(255, 208, 228, 0.85), rgba(255, 208, 228, 0));
+  animation-delay: 2s;
 }
 
 .heart {
   position: absolute;
-  bottom: -30px;
-  color: rgba(255, 95, 162, 0.42);
-  animation: floatUp linear infinite;
+  bottom: -10vh;
+  border: 0;
+  background: transparent;
+  padding: 0;
+  margin: 0;
+  line-height: 1;
+  user-select: none;
+  pointer-events: auto;
+  cursor: pointer;
+  filter: drop-shadow(0 6px 14px rgba(255, 95, 162, 0.28));
+  transform-origin: center;
+  animation:
+    floatUp var(--float-duration, 12s) linear forwards,
+    sway var(--sway-duration, 4s) ease-in-out infinite;
+  animation-delay: var(--delay, 0s), var(--delay, 0s);
+}
+
+.heart:hover {
+  transform: scale(1.15);
+}
+
+.heart.pop {
+  animation: none !important;
+  transform: scale(1.45);
+  opacity: 0;
+  transition: transform 0.12s ease, opacity 0.12s ease;
+}
+
+.sparkle {
+  position: absolute;
+  color: rgba(255, 120, 180, 0.75);
+  pointer-events: none;
+  filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.8));
+  animation: twinkle var(--twinkle-duration, 4s) ease-in-out infinite;
+}
+
+.burst-particle {
+  position: absolute;
+  line-height: 1;
+  pointer-events: none;
+  z-index: 8;
+  transform: translate(-50%, -50%) scale(0.7);
+  opacity: 1;
+  transition:
+    transform 0.8s cubic-bezier(0.18, 0.85, 0.2, 1),
+    opacity 0.8s ease;
+}
+
+.burst-particle.animate {
+  transform: translate(calc(-50% + var(--dx, 0px)), calc(-50% + var(--dy, 0px))) scale(1.3) rotate(var(--rot, 0deg));
+  opacity: 0;
+}
+
+@keyframes blobFloat {
+  from {
+    transform: translateY(0) translateX(0) scale(1);
+  }
+
+  to {
+    transform: translateY(-18px) translateX(14px) scale(1.08);
+  }
+}
+
+@keyframes sway {
+  0% {
+    margin-left: 0;
+  }
+
+  50% {
+    margin-left: 14px;
+  }
+
+  100% {
+    margin-left: 0;
+  }
 }
 
 @keyframes floatUp {
-  from {
+  0% {
     transform: translateY(0) rotate(0deg);
     opacity: 0;
   }
 
-  15% {
-    opacity: 1;
+  10% {
+    opacity: 0.95;
   }
 
-  to {
-    transform: translateY(-115vh) rotate(360deg);
+  100% {
+    transform: translateY(-120vh) rotate(360deg);
     opacity: 0;
+  }
+}
+
+@keyframes twinkle {
+  0%,
+  100% {
+    opacity: 0.15;
+    transform: scale(0.75);
+  }
+
+  50% {
+    opacity: 0.95;
+    transform: scale(1.2);
   }
 }
 
@@ -638,8 +799,6 @@ h3 {
   .video-slot {
     position: relative;
     display: inline-block;
-    width: calc(50% - 10px);
-    height: 190px;
     margin: 5px;
     left: auto !important;
     right: auto !important;
@@ -648,10 +807,26 @@ h3 {
     transform: rotate(-4deg) !important;
   }
 
-  .slot-five {
-    width: 70%;
-    height: 210px;
-    margin-left: 15%;
+  .video-slot.video-portrait {
+    width: calc(50% - 10px);
+    height: 220px;
+  }
+
+  .video-slot.video-landscape {
+    width: calc(100% - 12px);
+    height: 190px;
+  }
+
+  .video-slot.video-square {
+    width: calc(55% - 10px);
+    height: 190px;
+  }
+
+  .slot-five.video-landscape,
+  .slot-five.video-portrait,
+  .slot-five.video-square {
+    width: calc(100% - 12px);
+    margin-left: 0;
     transform: rotate(2deg) !important;
   }
 
