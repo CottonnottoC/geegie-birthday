@@ -2,7 +2,7 @@ const TARGET_DATE = new Date('2026-05-05T00:00:00+07:00');
 
 // ตอนลองเว็บเอง เปลี่ยนเป็น true
 // ตอนส่งให้แฟนจริง ต้องเปลี่ยนกลับเป็น false
-const TEST_MODE = false;
+const TEST_MODE = true;
 
 const imageMap = {
   'photo-letter-1': '',
